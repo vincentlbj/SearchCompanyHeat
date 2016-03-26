@@ -50,6 +50,7 @@ def search_company(file_name):
 		dict[company] = search_nums(page)
 	#进行从大到小排序
 	list = sorted(dict.items(), lambda x, y: cmp(x[1], y[1]), reverse = True)
+	print('排序结果为:').decode('utf-8')
 	for i in list:
 		print(i[0]+'搜索次数为: '+str(i[1])).decode('utf-8')
 
