@@ -18,13 +18,17 @@ user_agents = ['Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20130406 Fire
     'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) \
     Chrome/28.0.1468.0 Safari/537.36', \
     'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0; Trident/5.0; TheWorld)']
+
+#通过关键字得到网页
 def get_page(key_words):
 	url = 'http://www.baidu.com/s?wd=' + key_words
 	domain = urllib2.Request(url)
-	r = random.randint(0,9)
+	r = random.randint(0,11)
 	domain.add_header('User-agent', user_agents[r])
 	page = urllib2.urlopen(url)
 	return page
+
+#解析网页，查找搜索次数
 def search_nums(page):
 	try:
 		soup = BeautifulSoup(page, 'html.parser')
@@ -32,8 +36,11 @@ def search_nums(page):
 		print (Exception,":",e) 
 	print ('解析成功').decode('utf-8')
 	tags = soup.find_all('div', attrs = {'class':'nums'})
+	#提取数字
 	num = re.findall(r'[,0-9]+',tags[0].get_text())[0].replace(',','')
 	return int(num)
+
+#主函数
 def search_company(file_name):
 	dict = {}
 	for line in open(file_name):
@@ -41,11 +48,15 @@ def search_company(file_name):
 		page = get_page(company)
 		print ('获取'+company+'页面成功').decode('utf-8')
 		dict[company] = search_nums(page)
+	#进行从大到小排序
 	list = sorted(dict.items(), lambda x, y: cmp(x[1], y[1]), reverse = True)
 	for i in list:
 		print(i[0]+'搜索次数为: '+str(i[1])).decode('utf-8')
-print('start,please wait')
+		
+#此两行代码据说可以解决IncompleteRead异常
 httplib.HTTPConnection._http_vsn = 10 
 httplib.HTTPConnection._http_vsn_str = 'HTTP/1.0'
+
+print('start,please wait')
 search_company('company.txt')
 print('search over')
