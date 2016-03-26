@@ -23,7 +23,7 @@ user_agents = ['Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20130406 Fire
 def get_page(key_words):
 	url = 'http://www.baidu.com/s?wd=' + key_words
 	domain = urllib2.Request(url)
-	r = random.randint(0,11)
+	r = random.randint(0,9)
 	domain.add_header('User-agent', user_agents[r])
 	page = urllib2.urlopen(url)
 	return page
@@ -52,7 +52,7 @@ def search_company(file_name):
 	list = sorted(dict.items(), lambda x, y: cmp(x[1], y[1]), reverse = True)
 	for i in list:
 		print(i[0]+'搜索次数为: '+str(i[1])).decode('utf-8')
-		
+
 #此两行代码据说可以解决IncompleteRead异常
 httplib.HTTPConnection._http_vsn = 10 
 httplib.HTTPConnection._http_vsn_str = 'HTTP/1.0'
